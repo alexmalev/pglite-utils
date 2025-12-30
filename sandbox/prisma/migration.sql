@@ -99,6 +99,12 @@ CREATE TABLE "Product" (
 );
 
 -- CreateTable
+CREATE TABLE "ProductWithJsonArray" (
+    "id" TEXT NOT NULL,
+    "properties_arr" JSONB[] NOT NULL,
+    CONSTRAINT "ProductWithJsonArray_pkey" PRIMARY KEY ("id")
+);
+-- CreateTable
 CREATE TABLE "leak_test" (
     "id" TEXT NOT NULL,
     CONSTRAINT "leak_test_pkey" PRIMARY KEY ("id")
