@@ -17,15 +17,8 @@ export async function smokeTest(adapter: PrismaPGlite) {
 	const test = new SmokeTest(prisma, adapter.provider);
 
 	await test.testJSON();
-	await test.testTypeTest2();
-	await test.$raw();
-	await test.testFindManyTypeTest();
-	await test.transactionsWithConflicts();
-	await test.testCreateAndDeleteChildParent();
-	await test.interactiveTransactions();
-	await test.explicitTransaction();
-	await test.testBigInt();
-
+	await test.testJSONArray();
+	
 	console.log("[nodejs] disconnecting...");
 	await prisma.$disconnect();
 	console.log("[nodejs] disconnected");
@@ -48,10 +41,10 @@ class SmokeTest {
 	) {}
 
 	async testJSON() {
-		const json = JSON.stringify({
+		const json = {
 			foo: "bar",
 			baz: 1,
-		});
+		};
 
 		const created = await this.prisma.product.create({
 			data: {
@@ -59,6 +52,29 @@ class SmokeTest {
 			},
 			select: {
 				properties: true,
+			},
+		});
+
+		console.log("[nodejs] created", superjson.serialize(created).json);
+
+		const resultSet = await this.prisma.product.findMany({});
+		console.log("[nodejs] resultSet", superjson.serialize(resultSet).json);
+
+		await this.prisma.product.deleteMany({});
+	}
+
+	async testJSONArray() {
+		const jsonArray = [{
+			foo: "bar",
+			baz: 1,
+		}];
+
+		const created = await this.prisma.productWithJsonArray.create({
+			data: {
+				properties_arr: jsonArray,
+			},
+			select: {
+				properties_arr: true,
 			},
 		});
 

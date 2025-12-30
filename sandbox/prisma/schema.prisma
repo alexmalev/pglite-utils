@@ -112,6 +112,11 @@ model Product {
   properties_null Json?
 }
 
+model ProductWithJsonArray {
+  id              String @id @default(cuid())
+  properties_arr      Json[]
+}
+
 model leak_test {
   id String @id @default(cuid())
 }
